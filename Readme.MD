@@ -23,3 +23,8 @@ A web application implementing a Latent Semantic Analysis (LSA) based search eng
 git clone https://github.com/AdiBhan/lsa-search-engine
 cd lsa-search-engine
 make install
+
+
+### 🏃 Run
+```bash
+make run
