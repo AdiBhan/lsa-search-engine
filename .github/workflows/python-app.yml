@@ -1,0 +1,41 @@
+name: LSA Search Engine CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Install backend dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        make install
+
+    - name: Run application
+      run: |
+        make run &
+        sleep 10
+
+    - name: Check that the app is running
+      run: |
+        curl --fail http://localhost:3000 || exit 1
