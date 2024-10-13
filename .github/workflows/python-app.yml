@@ -24,9 +24,9 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # Updated to a more recent version
+        node-version: '18'  # Updated to use Node.js 18
 
-    - name: Install backend dependencies
+    - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
         make install
@@ -34,14 +34,18 @@ jobs:
     - name: Run application
       run: |
         make run &
-        sleep 30  # Increased sleep time to allow for startup
+        sleep 30  # Allow time for both servers to start
 
-    - name: Check that the app is running
+    - name: Check that the frontend is running
       run: |
         curl --fail http://localhost:3000 || exit 1
+
+    - name: Check that the backend is running
+      run: |
+        curl --fail http://127.0.0.1:8000/docs || exit 1
 
     - name: Stop the application
       if: always()
       run: |
-        pkill -f "python main.py" || true
+        pkill -f "fastapi dev" || true
         pkill -f "ng serve" || true
