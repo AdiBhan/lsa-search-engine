@@ -24,7 +24,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '14'
+        node-version: '16'  # Updated to a more recent version
 
     - name: Install backend dependencies
       run: |
@@ -34,8 +34,14 @@ jobs:
     - name: Run application
       run: |
         make run &
-        sleep 10
+        sleep 30  # Increased sleep time to allow for startup
 
     - name: Check that the app is running
       run: |
         curl --fail http://localhost:3000 || exit 1
+
+    - name: Stop the application
+      if: always()
+      run: |
+        pkill -f "python main.py" || true
+        pkill -f "ng serve" || true
